@@ -1,0 +1,5 @@
+#!/bin/bash
+# Para o serviço e desabilita a inicialização junto com o sistema
+systemctl stop apt-monitor || true
+systemctl disable apt-monitor || true
+systemctl daemon-reload || true

@@ -1,0 +1,4 @@
+#!/bin/bash
+systemctl daemon-reload
+systemctl enable apt-monitor
+systemctl restart apt-monitor

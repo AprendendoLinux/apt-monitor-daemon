@@ -1,0 +1,14 @@
+[Unit]
+Description=Daemon de Monitoramento de Atualizações APT
+After=network.target
+
+[Service]
+Type=simple
+User=root
+Environment=PYTHONUNBUFFERED=1
+ExecStart=/usr/bin/python3 /opt/apt-monitor/apt_monitor.py
+Restart=on-failure
+RestartSec=30
+
+[Install]
+WantedBy=multi-user.target
