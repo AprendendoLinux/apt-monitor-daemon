@@ -144,29 +144,30 @@ def send_email_alert(server_name, packages, ips, email_config, is_critical):
     </html>
     """
 
-    msg = MIMEMultipart("alternative")
-    msg["Subject"] = assunto
-    
-    # Formata o cabeçalho de forma segura contra anti-spoofing
-    msg["From"] = formataddr((email_config["sender_name"], email_config["sender_email"]))
-    msg["To"] = ", ".join(email_config["recipients"])
-    
-    msg.attach(MIMEText(html_content, "html"))
-
     try:
+        # Abre a conexão SMTP uma única vez
         if email_config["port"] == 465:
-            with smtplib.SMTP_SSL(email_config["server"], email_config["port"]) as server:
-                server.login(email_config["user"], email_config["pass"])
-                # O servidor SMTP requer apenas o endereço bruto no sendmail
-                server.sendmail(email_config["sender_email"], email_config["recipients"], msg.as_string())
+            server = smtplib.SMTP_SSL(email_config["server"], email_config["port"])
         else:
-            with smtplib.SMTP(email_config["server"], email_config["port"]) as server:
-                server.starttls()
-                server.login(email_config["user"], email_config["pass"])
-                # O servidor SMTP requer apenas o endereço bruto no sendmail
-                server.sendmail(email_config["sender_email"], email_config["recipients"], msg.as_string())
-        
-        logging.info(f"E-mail enviado com sucesso para: {', '.join(email_config['recipients'])}")
+            server = smtplib.SMTP(email_config["server"], email_config["port"])
+            server.starttls()
+            
+        with server:
+            server.login(email_config["user"], email_config["pass"])
+            
+            # Loop iterando sobre cada e-mail configurado
+            for recipient in email_config["recipients"]:
+                msg = MIMEMultipart("alternative")
+                msg["Subject"] = assunto
+                msg["From"] = formataddr((email_config["sender_name"], email_config["sender_email"]))
+                # Define apenas o destinatário atual no cabeçalho "To"
+                msg["To"] = recipient
+                msg.attach(MIMEText(html_content, "html"))
+                
+                # Envia o e-mail individualmente
+                server.sendmail(email_config["sender_email"], [recipient], msg.as_string())
+                logging.info(f"E-mail enviado com sucesso individualmente para: {recipient}")
+                
     except Exception as e:
         logging.error(f"Falha ao enviar E-mail via {email_config['server']}:{email_config['port']} - {e}")
 
