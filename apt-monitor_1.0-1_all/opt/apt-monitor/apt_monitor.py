@@ -10,6 +10,7 @@ import smtplib
 import logging
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+from email.utils import formataddr
 
 CONFIG_FILE = "/etc/apt-monitor/apt-monitor.conf"
 LOG_FILE = "/var/log/apt-monitor.log"
@@ -37,7 +38,7 @@ def load_config():
     config.read(CONFIG_FILE)
     
     try:
-        bot_token = config.get("Telegram", "BOT_TOKEN")
+        bot_token = config.get("Telegram", "BOT_TOKEN").strip()
         chat_ids = [cid.strip() for cid in config.get("Telegram", "CHAT_IDS").split(",") if cid.strip()]
         horas_rotacao = config.getfloat("Monitor", "CHECK_INTERVAL_HOURS", fallback=4.0)
     except (configparser.NoOptionError, configparser.NoSectionError) as e:
@@ -48,11 +49,12 @@ def load_config():
     if config.has_section("Email"):
         try:
             email_config = {
-                "server": config.get("Email", "SMTP_SERVER"),
+                "server": config.get("Email", "SMTP_SERVER").strip(),
                 "port": config.getint("Email", "SMTP_PORT"),
-                "user": config.get("Email", "SMTP_USER"),
-                "pass": config.get("Email", "SMTP_PASS"),
-                "sender": config.get("Email", "SENDER_EMAIL"),
+                "user": config.get("Email", "SMTP_USER").strip(),
+                "pass": config.get("Email", "SMTP_PASS").strip(),
+                "sender_name": config.get("Email", "SENDER_NAME", fallback="APT Monitor").strip(),
+                "sender_email": config.get("Email", "SENDER_EMAIL").strip(),
                 "recipients": [e.strip() for e in config.get("Email", "RECIPIENT_EMAILS").split(",") if e.strip()]
             }
         except Exception as e:
@@ -144,20 +146,25 @@ def send_email_alert(server_name, packages, ips, email_config, is_critical):
 
     msg = MIMEMultipart("alternative")
     msg["Subject"] = assunto
-    msg["From"] = email_config["sender"]
+    
+    # Formata o cabeçalho de forma segura contra anti-spoofing
+    msg["From"] = formataddr((email_config["sender_name"], email_config["sender_email"]))
     msg["To"] = ", ".join(email_config["recipients"])
+    
     msg.attach(MIMEText(html_content, "html"))
 
     try:
         if email_config["port"] == 465:
             with smtplib.SMTP_SSL(email_config["server"], email_config["port"]) as server:
                 server.login(email_config["user"], email_config["pass"])
-                server.sendmail(email_config["sender"], email_config["recipients"], msg.as_string())
+                # O servidor SMTP requer apenas o endereço bruto no sendmail
+                server.sendmail(email_config["sender_email"], email_config["recipients"], msg.as_string())
         else:
             with smtplib.SMTP(email_config["server"], email_config["port"]) as server:
                 server.starttls()
                 server.login(email_config["user"], email_config["pass"])
-                server.sendmail(email_config["sender"], email_config["recipients"], msg.as_string())
+                # O servidor SMTP requer apenas o endereço bruto no sendmail
+                server.sendmail(email_config["sender_email"], email_config["recipients"], msg.as_string())
         
         logging.info(f"E-mail enviado com sucesso para: {', '.join(email_config['recipients'])}")
     except Exception as e:
