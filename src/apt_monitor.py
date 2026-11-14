@@ -34,7 +34,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.utils import formataddr, formatdate, make_msgid
 
-__version__ = "1.1.0"
+__version__ = "1.1.1"
 
 DEFAULT_CONFIG = "/etc/apt-monitor/apt-monitor.conf"
 DEFAULT_STATE = "/var/lib/apt-monitor/state.json"

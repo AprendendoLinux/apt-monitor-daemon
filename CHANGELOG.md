@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.1.1
+- Adiciona a licença MIT (`LICENSE`) e o arquivo `copyright` do pacote no formato Debian.
+
 ## 1.1.0
 
 ### Segurança

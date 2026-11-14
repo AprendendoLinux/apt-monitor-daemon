@@ -9,6 +9,7 @@
 ![Debian](https://img.shields.io/badge/Debian-11%20%7C%2012%20%7C%2013-A81D33?logo=debian&logoColor=white)
 ![Ubuntu](https://img.shields.io/badge/Ubuntu-20.04%20%7C%2022.04%20%7C%2024.04-E95420?logo=ubuntu&logoColor=white)
 ![Python](https://img.shields.io/badge/Python-%E2%89%A5%203.6-3776AB?logo=python&logoColor=white)
+[![Licença](https://img.shields.io/github/license/AprendendoLinux/apt-monitor-daemon?label=licen%C3%A7a)](LICENSE)
 
 </div>
 
@@ -30,6 +31,7 @@ Daemon leve em Python, executado pelo `systemd`, que verifica periodicamente as 
 - [Perguntas frequentes](#-perguntas-frequentes)
 - [Documentação](#-documentação)
 - [Desenvolvimento e contribuição](#-desenvolvimento-e-contribuição)
+- [Licença](#-licença)
 
 ## 🌟 Por que usar
 
@@ -48,7 +50,7 @@ Daemon leve em Python, executado pelo `systemd`, que verifica periodicamente as 
 
 ```bash
 # 1. instalar (baixe o .deb em Releases)
-sudo apt install ./apt-monitor_1.1-1_all.deb
+sudo apt install ./apt-monitor_1.1.1-1_all.deb
 
 # 2. configurar Telegram e/ou e-mail
 sudo nano /etc/apt-monitor/apt-monitor.conf
@@ -96,7 +98,7 @@ Baixe o arquivo mais recente em **[Releases](https://github.com/AprendendoLinux/
 
 ```bash
 sha256sum -c SHA256SUMS --ignore-missing
-sudo apt install ./apt-monitor_1.1-1_all.deb
+sudo apt install ./apt-monitor_1.1.1-1_all.deb
 ```
 
 O pacote copia os arquivos, cria `/var/lib/apt-monitor`, protege o `.conf` (`0600`), configura o `logrotate` e
@@ -258,6 +260,10 @@ tests/docker/systemd-test.sh                # idem, com systemd real
 ```
 
 Veja [CONTRIBUTING.md](CONTRIBUTING.md). Releases são geradas automaticamente ao criar uma tag `vX.Y.Z`.
+
+## 📄 Licença
+
+[MIT](LICENSE) © 2026 Luiz Marques e colaboradores.
 
 ---
 
