@@ -1,0 +1,14 @@
+Package: apt-monitor
+Version: @VERSION@
+Architecture: all
+Section: admin
+Priority: optional
+Maintainer: Luiz Marques <henrique@henrique.tec.br>
+Homepage: https://github.com/AprendendoLinux/apt-monitor-daemon
+Depends: python3 (>= 3.6), python3-apt, ca-certificates
+Recommends: iproute2
+Installed-Size: @SIZE@
+Description: Daemon de monitoramento de pacotes APT com alertas
+ Verifica periodicamente se há atualizações pendentes no Debian/Ubuntu e avisa
+ por Telegram e/ou e-mail (HTML). Destaca atualizações de kernel e de segurança,
+ avisa quando é preciso reiniciar e não repete alertas já enviados.

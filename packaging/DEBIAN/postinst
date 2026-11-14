@@ -1,0 +1,30 @@
+#!/bin/sh
+set -e
+
+case "$1" in
+configure)
+    install -d -m 0750 /var/lib/apt-monitor
+    # O arquivo guarda token do bot e senha SMTP: só root deve ler.
+    chmod 0600 /etc/apt-monitor/apt-monitor.conf 2>/dev/null || true
+
+    if [ -d /run/systemd/system ]; then
+        systemctl daemon-reload >/dev/null 2>&1 || true
+        # Habilita na instalação nova, ou ao migrar da 1.0 (cujo prerm desabilitava o serviço
+        # a cada upgrade). Em upgrades posteriores respeita a escolha do administrador.
+        if [ -z "$2" ] || dpkg --compare-versions "$2" lt 1.1; then
+            systemctl enable apt-monitor.service >/dev/null 2>&1 || true
+        fi
+        if /usr/lib/apt-monitor/apt_monitor.py --check-config >/dev/null 2>&1; then
+            if systemctl is-enabled --quiet apt-monitor.service 2>/dev/null; then
+                systemctl restart apt-monitor.service >/dev/null 2>&1 || true
+            fi
+        else
+            echo "apt-monitor: configuração ainda não preenchida; o serviço NÃO foi iniciado." >&2
+            echo "apt-monitor: edite /etc/apt-monitor/apt-monitor.conf, teste com 'sudo apt-monitor --test-notify'" >&2
+            echo "apt-monitor: e inicie com 'sudo systemctl restart apt-monitor'." >&2
+        fi
+    fi
+    ;;
+esac
+
+exit 0
