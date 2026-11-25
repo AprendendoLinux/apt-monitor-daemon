@@ -5,7 +5,8 @@
 **Saiba na hora quando seus servidores Debian/Ubuntu têm atualizações pendentes — sem spam.**
 
 [![CI](https://github.com/AprendendoLinux/apt-monitor-daemon/actions/workflows/ci.yml/badge.svg)](https://github.com/AprendendoLinux/apt-monitor-daemon/actions/workflows/ci.yml)
-[![Release](https://img.shields.io/github/v/release/AprendendoLinux/apt-monitor-daemon?label=vers%C3%A3o)](https://github.com/AprendendoLinux/apt-monitor-daemon/releases/latest)
+[![Release](https://img.shields.io/github/v/release/AprendendoLinux/apt-monitor-daemon?filter=v*&label=cl%C3%A1ssico)](https://github.com/AprendendoLinux/apt-monitor-daemon/releases?q=%22APT+Monitor+v%22&expanded=true)
+[![Plus](https://img.shields.io/github/v/release/AprendendoLinux/apt-monitor-daemon?filter=plus-v*&label=Plus&color=d97706)](plus/README.md)
 ![Debian](https://img.shields.io/badge/Debian-11%20%7C%2012%20%7C%2013-A81D33?logo=debian&logoColor=white)
 ![Ubuntu](https://img.shields.io/badge/Ubuntu-20.04%20%7C%2022.04%20%7C%2024.04-E95420?logo=ubuntu&logoColor=white)
 ![Python](https://img.shields.io/badge/Python-%E2%89%A5%203.6-3776AB?logo=python&logoColor=white)
@@ -16,6 +17,31 @@
 Daemon leve em Python, executado pelo `systemd`, que verifica periodicamente as atualizações do APT e avisa por
 **Telegram** e/ou **e-mail (HTML)**. Destaca atualizações de **kernel** e de **segurança**, avisa quando é preciso
 **reiniciar** e lembra o que já foi notificado — então você recebe **um alerta por novidade**, não um por checagem.
+
+> ### ⭐ Conheça o **APT Monitor Plus**
+>
+> Uma edição **completa** do mesmo software, no mesmo repositório: além dos alertas, ela avisa os administradores **na
+> hora** (≈ 1 minuto depois que o apt detecta) e envia ao **cliente** um **relatório diário** do que o administrador
+> atualizou (pacotes com sucesso e com falha), avisando também de **pendências antigas**. Os e-mails são totalmente novos.
+>
+> | | **Clássico** (esta página) | **[Plus](plus/README.md)** |
+> |---|:---:|:---:|
+> | Alertas aos administradores (Telegram e e-mail), kernel, segurança, reinício | ✅ | ✅ |
+> | Alerta imediato quando o apt muda (≈ 1 min) | — | ✅ |
+> | E-mails novos (por gravidade, cartões, celular) | — | ✅ |
+> | Relatório diário ao cliente (Telegram e/ou e-mail) | — | ✅ |
+> | Aviso de pendência antiga ao cliente | — | ✅ |
+> | Histórico do que foi atualizado (SQLite) | — | ✅ |
+> | Dependências | `python3-apt` | `python3-apt` + `tzdata` |
+>
+> **Escolha o Plus** se presta serviço a alguém e quer **mostrar o trabalho feito** automaticamente, ou quer alertas mais
+> rápidos. **Fique no clássico** se o alerta simples basta. O Plus **substitui** o clássico e **migra a sua configuração
+> sozinho**: **[leia o guia do Plus](plus/README.md)** · **[migração](plus/docs/migracao.md)**.
+>
+> | Edição | Pacote | Tags de release | Documentação |
+> |---|---|---|---|
+> | Clássico | `apt-monitor` | `v1.x.y` | esta página e `docs/` |
+> | **Plus** | `apt-monitor-plus` | `plus-v1.x.y` | [`plus/`](plus/README.md) |
 
 ## Índice
 
@@ -93,7 +119,7 @@ segurança* e alternativa em texto puro. Cada destinatário recebe a própria me
 
 ### Pelo `.deb` (recomendado)
 
-Baixe o arquivo mais recente em **[Releases](https://github.com/AprendendoLinux/apt-monitor-daemon/releases/latest)**
+Baixe o arquivo mais recente do APT Monitor clássico em **[Releases](https://github.com/AprendendoLinux/apt-monitor-daemon/releases?q=%22APT+Monitor+v%22&expanded=true)** (versões `v…`)
 (há também o `SHA256SUMS` para conferir a integridade):
 
 ```bash

@@ -1,0 +1,15 @@
+#!/bin/sh
+set -e
+
+if [ -d /run/systemd/system ]; then
+    systemctl daemon-reload >/dev/null 2>&1 || true
+fi
+
+case "$1" in
+purge)
+    rm -rf /var/lib/apt-monitor-plus
+    rm -f /var/log/apt-monitor-plus.log /var/log/apt-monitor-plus.log.*
+    ;;
+esac
+
+exit 0

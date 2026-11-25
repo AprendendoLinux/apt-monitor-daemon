@@ -1,0 +1,60 @@
+#!/bin/sh
+set -e
+
+CONF=/etc/apt-monitor-plus/apt-monitor.conf
+OLD_CONF=/etc/apt-monitor/apt-monitor.conf
+OLD_STATE=/var/lib/apt-monitor/state.json
+NEW_STATE=/var/lib/apt-monitor-plus/state.json
+
+# Migra a configuração do APT Monitor clássico (pacote apt-monitor), se existir.
+migrate_from_classic() {
+    # Só na primeira instalação do Plus e só se o .conf do Plus ainda for o modelo de exemplo.
+    [ -z "$2" ] || return 0
+    if [ -f "$OLD_CONF" ] && grep -q 'seu_bot_token_aqui' "$CONF" 2>/dev/null; then
+        tmp="$CONF.migrando"
+        {
+            cat "$OLD_CONF"
+            printf '\n\n'
+            # Acrescenta a parte do Plus (seções do cliente), toda comentada, a partir do marcador.
+            sed -n '/^# >>> APT Monitor Plus >>>/,$p' "$CONF"
+        } > "$tmp"
+        chmod 0600 "$tmp"
+        mv "$tmp" "$CONF"
+        echo "apt-monitor-plus: configuração do apt-monitor migrada para $CONF." >&2
+    fi
+    if [ -f "$OLD_STATE" ] && [ ! -e "$NEW_STATE" ]; then
+        cp -p "$OLD_STATE" "$NEW_STATE"      # evita reenviar alertas já avisados
+        chmod 0600 "$NEW_STATE"
+        echo "apt-monitor-plus: estado anterior migrado (alertas já enviados não se repetem)." >&2
+    fi
+}
+
+case "$1" in
+configure)
+    install -d -m 0750 /var/lib/apt-monitor-plus
+    migrate_from_classic "$@"
+    # O arquivo guarda token do bot e senha SMTP: só root deve ler.
+    chmod 0600 "$CONF" 2>/dev/null || true
+
+    if [ -d /run/systemd/system ]; then
+        systemctl daemon-reload >/dev/null 2>&1 || true
+        # Instalação nova (inclusive a troca vinda do apt-monitor): habilita o serviço.
+        # Em upgrades do próprio Plus respeita a escolha do administrador.
+        if [ -z "$2" ]; then
+            systemctl enable apt-monitor-plus.service >/dev/null 2>&1 || true
+        fi
+        if /usr/lib/apt-monitor-plus/apt_monitor.py --check-config >/dev/null 2>&1; then
+            if systemctl is-enabled --quiet apt-monitor-plus.service 2>/dev/null; then
+                systemctl restart apt-monitor-plus.service >/dev/null 2>&1 || true
+            fi
+        else
+            echo "apt-monitor-plus: configuração ainda não preenchida; o serviço NÃO foi iniciado." >&2
+            echo "apt-monitor-plus: edite $CONF, valide com 'sudo apt-monitor-plus --check-config'," >&2
+            echo "apt-monitor-plus: teste com 'sudo apt-monitor-plus --test-notify' e inicie com" >&2
+            echo "apt-monitor-plus: 'sudo systemctl restart apt-monitor-plus'." >&2
+        fi
+    fi
+    ;;
+esac
+
+exit 0
