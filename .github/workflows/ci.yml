@@ -7,8 +7,9 @@ on:
 
 jobs:
   unit:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04      # o ubuntu-latest (26.04) não tem mais o Python 3.8 no setup-python
     strategy:
+      fail-fast: false
       matrix:
         python: ["3.8", "3.12"]
     steps:
