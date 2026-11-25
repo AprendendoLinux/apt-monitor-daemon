@@ -126,6 +126,8 @@ REPORT_TIMEZONE=America/Sao_Paulo
 
 > O texto de **pendência antiga** nunca cita nomes: diz apenas "entrar em contato com o administrador do servidor".
 
+> 📄 Para ver **como tudo isso fica junto em um arquivo só**, veja o [exemplo de configuração completa](exemplo-configuracao.md).
+
 ## 5. Teste antes de valer
 
 Aplique a configuração e **teste, sem esperar a noite**:

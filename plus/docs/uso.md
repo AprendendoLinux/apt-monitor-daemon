@@ -44,7 +44,8 @@ CHAT_IDS=12345678
 ```
 
 (Como obter token e `chat_id`: [guia do Telegram](../../docs/telegram.md). Todas as opções:
-[Referência de configuração](configuracao.md).)
+[Referência de configuração](configuracao.md). Um arquivo inteiro, pronto para copiar e adaptar:
+[exemplo de configuração completa](exemplo-configuracao.md).)
 
 ### 3. Valide
 

@@ -247,6 +247,9 @@ RECIPIENT_EMAILS=responsavel@empresa.com.br, financeiro@empresa.com.br
 
 ## Exemplos prontos
 
+> 📄 Procurando **um arquivo inteiro**, como ele fica num servidor em produção (com os comentários e tudo)? Veja o
+> **[Exemplo de configuração completa](exemplo-configuracao.md)**. Abaixo estão trechos para casos específicos.
+
 ### 1. Só administradores, só Telegram (o mínimo)
 
 ```ini
