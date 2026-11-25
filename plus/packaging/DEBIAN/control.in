@@ -1,0 +1,18 @@
+Package: apt-monitor-plus
+Version: @VERSION@
+Architecture: all
+Section: admin
+Priority: optional
+Maintainer: Luiz Marques <henrique@henrique.tec.br>
+Homepage: https://github.com/AprendendoLinux/apt-monitor-daemon
+Depends: python3 (>= 3.6), python3-apt, ca-certificates, tzdata
+Recommends: iproute2
+Conflicts: apt-monitor
+Replaces: apt-monitor
+Installed-Size: @SIZE@
+Description: APT Monitor Plus: alertas de atualização e relatório diário ao cliente
+ Edição Plus do APT Monitor. Avisa os administradores, na hora, por Telegram
+ e/ou e-mail (HTML) quando há atualizações pendentes, destacando kernel e
+ segurança, e envia ao cliente um relatório diário do que o administrador
+ atualizou, com o total de pacotes (sucesso e falha) e aviso de pendências
+ antigas. Substitui o pacote apt-monitor e migra a configuração dele.
