@@ -38,7 +38,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.utils import formataddr, formatdate, make_msgid
 
-__version__ = "1.0.0"
+__version__ = "1.0.1"
 PRODUCT = "APT Monitor Plus"
 PROG = "apt-monitor-plus"
 

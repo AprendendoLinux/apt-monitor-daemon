@@ -201,7 +201,7 @@ O log fica em `/var/log/apt-monitor-plus.log` (e no journal do systemd). Linhas 
 
 | Linha | Significado |
 |---|---|
-| `=== Iniciando APT Monitor Plus 1.0.0 em srv ===` | O serviço subiu. |
+| `=== Iniciando APT Monitor Plus 1.0.1 em srv ===` | O serviço subiu. |
 | `Canais: telegram, email \| intervalo: 4.0 hora(s)` | Canais de administrador ativos. |
 | `Relatório diário ao cliente (telegram, email) às 22:30 (America/Sao_Paulo).` | Cliente configurado. |
 | `Encontrados 5 pacotes pendentes. Crítico (Kernel): True` | Um alerta vai sair. |

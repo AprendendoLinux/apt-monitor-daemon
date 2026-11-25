@@ -235,4 +235,15 @@ apt-get remove -y -qq apt-monitor-plus >/dev/null
 [ -f $STATE/history.db ] && ok "remove mantém o histórico" || die "histórico apagado no remove"
 apt-get purge -y -qq apt-monitor-plus >/dev/null
 [ ! -e /etc/apt-monitor-plus ] && [ ! -e $STATE ] && ok "purge limpou conf, estado e histórico" || die "purge incompleto"
+step "Rollback e reinstalação do Plus: o bloco do Plus não duplica"
+mkdir -p /etc/apt-monitor
+printf '%s\n' '[Telegram]' 'BOT_TOKEN=111111111:AAEclassicEXAMPLEexampleTOKEN_abcd1' 'CHAT_IDS=111' > /etc/apt-monitor/apt-monitor.conf
+printf '\n# >>> APT Monitor Plus >>> (deixado por uma instalação anterior do Plus)\n#[Report]\n' >> /etc/apt-monitor/apt-monitor.conf
+dpkg -s apt-monitor >/dev/null 2>&1 && die "clássico não deveria estar instalado"
+apt-get install -y -qq "$DEB" >/dev/null 2>&1 || die "reinstalação do Plus falhou"
+[ "$(grep -c '^# >>> APT Monitor Plus >>>' $CONF)" = 1 ] && ok "marcador do Plus aparece uma única vez" || die "bloco do Plus duplicado"
+grep -q 'AAEclassicEXAMPLE' $CONF && ok "configuração do clássico copiada" || die "conf não migrado"
+rm -rf /etc/apt-monitor
+apt-get purge -y -qq apt-monitor-plus >/dev/null 2>&1
+
 echo; echo "✅ $PRETTY_NAME: tudo OK"
