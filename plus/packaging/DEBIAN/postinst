@@ -16,7 +16,10 @@ migrate_from_classic() {
             cat "$OLD_CONF"
             printf '\n\n'
             # Acrescenta a parte do Plus (seções do cliente), toda comentada, a partir do marcador.
-            sed -n '/^# >>> APT Monitor Plus >>>/,$p' "$CONF"
+            # (a menos que o .conf antigo já a tenha, como num rollback seguido de nova instalação do Plus).
+            if ! grep -q '^# >>> APT Monitor Plus >>>' "$OLD_CONF"; then
+                sed -n '/^# >>> APT Monitor Plus >>>/,$p' "$CONF"
+            fi
         } > "$tmp"
         chmod 0600 "$tmp"
         mv "$tmp" "$CONF"

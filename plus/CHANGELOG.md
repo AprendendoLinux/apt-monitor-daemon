@@ -3,6 +3,12 @@
 O Plus tem **versões próprias**, independentes do APT Monitor clássico (`CHANGELOG.md` na raiz do repositório).
 Tags de release: `plus-vX.Y.Z`.
 
+## 1.0.1
+
+### Corrigido
+- Voltar ao clássico e instalar o Plus de novo **duplicava** o bloco do Plus (`[Report]`, `[ClientTelegram]`,
+  `[ClientEmail]`) no `.conf`. A migração agora só acrescenta esse bloco se o `.conf` antigo ainda não o tiver.
+
 ## 1.0.0
 
 Primeira versão da edição **Plus**. Ela parte do núcleo do APT Monitor clássico 1.1.1 (alertas de atualização, kernel,

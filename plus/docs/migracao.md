@@ -80,7 +80,7 @@ Depois, confira (veja [Como conferir](#como-conferir)) e, se quiser, ative o rel
 ```bash
 systemctl status apt-monitor-plus            # ativo (running)
 systemctl status apt-monitor                 # deve dizer que a unit não existe / inativa
-apt-monitor-plus --version                   # apt-monitor-plus 1.0.0
+apt-monitor-plus --version                   # apt-monitor-plus 1.0.1
 sudo apt-monitor-plus --check-config         # Configuração OK + canais ativos
 sudo apt-monitor-plus --test-notify          # recebe a mensagem de teste?
 sudo grep -c . /etc/apt-monitor-plus/apt-monitor.conf   # o arquivo foi migrado
