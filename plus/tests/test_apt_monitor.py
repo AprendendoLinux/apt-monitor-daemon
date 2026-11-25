@@ -8,6 +8,7 @@ import io
 import json
 import logging
 import os
+import re
 import socketserver
 import sys
 import tempfile
@@ -1227,6 +1228,45 @@ class OverdueMessageTests(unittest.TestCase):
         self.assertFalse(report.pending_only)
         self.assertIn("Ainda aguardam atualização: <b>3</b>", report.telegram_text())
         self.assertNotIn("Sugerimos", report.telegram_text())
+
+
+class DocumentationExampleTests(unittest.TestCase):
+    """O exemplo de plus/docs/exemplo-configuracao.md precisa continuar válido (e fictício)."""
+
+    DOC = os.path.join(os.path.dirname(__file__), "..", "docs", "exemplo-configuracao.md")
+
+    def example(self):
+        with open(self.DOC, encoding="utf-8") as handle:
+            text = handle.read()
+        start = text.index("```ini\n") + len("```ini\n")
+        return text[start:text.index("\n```", start)] + "\n"
+
+    def test_example_loads_with_the_four_channels_active(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            cfg = am.load_config(write_conf(tmp, self.example()))
+        self.assertEqual(cfg.channels(), ["telegram", "email"])                 # analista
+        self.assertEqual(cfg.client_channels(), ["telegram", "email"])          # cliente
+        self.assertEqual(cfg.chat_ids, ["12345678"])
+        self.assertEqual(cfg.client_chat_ids, ["-1009876543210"])
+        self.assertNotEqual(cfg.bot_token, cfg.client_bot_token)                 # bots diferentes
+        self.assertEqual(cfg.email["recipients"], ["analista@exemplo.com"])
+        self.assertEqual(cfg.client_email["recipients"], ["cliente@empresa.exemplo.com"])
+        self.assertEqual((cfg.admin_name, cfg.report_time, cfg.report_tz, cfg.pending_alert_days),
+                         ("Maria Souza", (22, 30), "America/Sao_Paulo", 3.0))
+        self.assertEqual((cfg.interval_hours, cfg.report_send_empty, cfg.report_package_list), (1.0, False, True))
+
+    def test_example_has_only_fictitious_data(self):
+        text = self.example()
+        self.assertIsNone(re.search(r"\b(?:\d{1,3}\.){3}\d{1,3}\b", text), "IP real no exemplo")
+        self.assertNotRegex(text, r"[A-Za-z0-9._-]+@(?!exemplo\.com|empresa\.exemplo\.com)[A-Za-z0-9.-]+")   # só domínios fictícios
+        for token in re.findall(r"BOT_TOKEN=(\S+)", text):
+            self.assertIn("Exemplo", token)                                      # nunca um token de verdade
+
+    def test_documented_example_is_linked_from_the_docs(self):
+        base = os.path.join(os.path.dirname(__file__), "..")
+        for rel in ("README.md", os.path.join("docs", "configuracao.md")):
+            with open(os.path.join(base, rel), encoding="utf-8") as handle:
+                self.assertTrue("exemplo-configuracao.md" in handle.read(), "falta o link para o exemplo em " + rel)
 
 
 class ReportCLITests(unittest.TestCase):

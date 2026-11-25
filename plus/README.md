@@ -195,6 +195,10 @@ SENDER_NAME=Suporte Técnico
 RECIPIENT_EMAILS=responsavel@empresa.com.br
 ```
 
+📄 **Quer ver um arquivo completo, como fica num servidor de verdade?** Veja o
+**[exemplo de configuração completa](docs/exemplo-configuracao.md)** (analista e cliente, Telegram e e-mail, com dados
+fictícios).
+
 📖 **Todas as chaves, padrões, valores aceitos, erros e exemplos:**
 **[Referência de configuração](docs/configuracao.md)**. O modelo completo e comentado também fica em
 `/usr/share/doc/apt-monitor-plus/examples/apt-monitor.conf`.
@@ -299,6 +303,7 @@ Mais em [Solução de problemas](docs/solucao-de-problemas.md).
 |---|---|
 | [Guia de uso](docs/uso.md) | Instalar, ligar, testar, comandos, um dia típico, mensagens, logs, backup |
 | [Referência de configuração](docs/configuracao.md) | **Todas as chaves**, padrões, erros e exemplos prontos |
+| [Exemplo de configuração completa](docs/exemplo-configuracao.md) | Um `.conf` real de produção (dados fictícios): analista e cliente, Telegram e e-mail |
 | [Configuração do cliente](docs/cliente.md) | Segundo bot, grupo, e-mail, nome do administrador, testes |
 | [Relatório diário](docs/relatorio.md) | Regras: o que conta, quando sai, pendências antigas, casos de borda |
 | [Galeria de mensagens](docs/emails.md) | Capturas dos e-mails (desktop e celular) |
